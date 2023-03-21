@@ -10,18 +10,27 @@ import {
 } from 'react-native';
 import { hitProfileAPI } from '../../action/profileapi';
 import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = (props) => {
-
-  useEffect(() => {
-    try {
-      props.hitProfileAPI();
-    } catch (error) {
-      console.log('Error in Fetch Movies List' + error);
-    }
-  }, [props]);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+
+
+
+  useEffect(() => {
+    getUserInfo();
+  }, [props]);
+
+
+  const getUserInfo = async () => {
+
+    const loggedIn = await AsyncStorage.getItem('status');
+    if (loggedIn) {
+      props.navigation.navigate('HomePage');
+    }
+  }
+
 
   const onClick = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -40,6 +49,7 @@ const Login = (props) => {
       return false;
     }
     if (email.toLowerCase() === "danish@gmail.com" && password === "Danish@123") {
+      AsyncStorage.setItem('status', 'true')
       props.navigation.navigate('HomePage');
     } else {
       alert("Invalid Email/Password")

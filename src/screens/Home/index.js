@@ -14,7 +14,9 @@ import {
 } from 'react-native';
 import { hitAPI } from '../../action/homeapi';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faShareAlt, faComment, faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faShareAlt, faComment, faHeart, faSignOut } from '@fortawesome/free-solid-svg-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 const Home = (props) => {
@@ -27,13 +29,20 @@ const Home = (props) => {
     }
   }, [props])
 
-
+const logOut = async() => { 
+  await AsyncStorage.clear();
+  props.navigation.goBack();
+ }
 
   const { Post } = props;
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.welcome}>Posts</Text>
+        <TouchableOpacity onPress={logOut}>
+          <FontAwesomeIcon style={styles.welcome} size={20} icon={faSignOut} />
+        </TouchableOpacity>
+
       </View>
 
       <FlatList
@@ -41,7 +50,6 @@ const Home = (props) => {
         renderItem={({ item, index }) => (
           <View style={styles['mt-20']}>
             <View style={styles.profileBoxShadow}>
-
               <View style={styles.cardIn}>
                 <Text style={styles.title}>{item.userId}</Text>
                 <Image style={styles.image} source={{ uri: "https://picsum.photos/1035" }} />
