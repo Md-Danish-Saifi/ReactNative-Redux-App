@@ -1,4 +1,5 @@
 import {PROFILE_API_REQUEST, PROFILE_API_SUCCESS, PROFILE_API_FAILURE} from './actionConst';
+import axios from 'axios';
 
 const apiRequested = () => ({
   type: PROFILE_API_REQUEST,
@@ -16,10 +17,9 @@ const apiFailure = data => ({
 
 export const hitProfileAPI = () => dispatch => {
   dispatch(apiRequested);
-  fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    .then(json => {
-      dispatch(apiSuccess(json));
+  axios.get('https://jsonplaceholder.typicode.com/users')
+    .then(response =>  {
+      dispatch(apiSuccess(response.data));
     })
     .catch(error => {
       console.log('hitAPI', 'json error is---' + error);

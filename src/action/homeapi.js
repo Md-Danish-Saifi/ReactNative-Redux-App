@@ -1,4 +1,5 @@
 import {API_FAILURE, API_SUCCESS, API_REQUEST} from './actionConst';
+import axios from 'axios';
 
 const apiRequested = () => ({
   type: API_REQUEST,
@@ -16,11 +17,10 @@ const apiFailure = data => ({
 
 export const hitAPI = () => dispatch => {
   dispatch(apiRequested);
-  fetch('https://jsonplaceholder.typicode.com/posts')
-    .then(response => response.json())
-    .then(json => {
+  axios.get('https://jsonplaceholder.typicode.com/posts')
+    .then(response =>{
       //apicallback(json);
-      dispatch(apiSuccess(json));
+      dispatch(apiSuccess(response.data));
     })
     .catch(error => {
       console.log('hitAPI', 'json error is---' + error);
